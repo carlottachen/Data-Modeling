@@ -80,6 +80,15 @@ CREATE TABLE users(
   user_last_name VARCHAR(50)
 );
 
+CREATE TABLE occasions(
+  occasion_id SERIAL PRIMARY KEY,
+  creator_id INT NOT NULL REFERENCES users(user_id),
+  occasion_title VARCHAR(50),
+  occasion_description VARCHAR(1000),
+  occasion_picture_url VARCHAR(2000),
+  time_occasion_posted TIMESTAMP
+);
+
 CREATE TABLE posts(
   post_id SERIAL PRIMARY KEY,
   author_id INT NOT NULL REFERENCES users(user_id),
@@ -90,15 +99,6 @@ CREATE TABLE posts(
   post_picture_url VARCHAR(2000),
   time_posted TIMESTAMP,
   public BOOLEAN DEFAULT false
-);
-
-CREATE TABLE occasions(
-  occasion_id SERIAL PRIMARY KEY,
-  creator_id INT NOT NULL REFERENCES users(user_id),
-  occasion_title VARCHAR(50),
-  occasion_description VARCHAR(1000),
-  occasion_picture_url VARCHAR(2000),
-  time_occasion_posted TIMESTAMP
 );
 
 CREATE TABLE linkied_posts(
