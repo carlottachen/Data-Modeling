@@ -1,0 +1,116 @@
+Features:
+> users can sign into the app with their email and password
+> users can create recipes with ingredients and instructions
+> recipes can be marked as public or private
+> users can view other people’s recipes
+> ingredients from recipes can be added to user’s grocery lists
+> users can create their own occasions and assign recipes to occasions
+
+Brainstorming:
+> username, email, password, first name, last name
+> post, post ingredients list, post instructions, post pictures
+> public (boolean)
+> occasions, occasion title, occasions text, occasions pictures
+
+Table Ideas:
+
+This table will contain info about a user
+Users:
+	- User email
+	- Username
+	- User password
+	- User first name
+	- User last name
+
+This table will contain info for posts
+Post:
+	- Author
+	- Post title
+	- Post description
+	- Post text content (instructions)
+	- Post recipe (ingredients list)
+	- Post pictures
+	- Time of post
+	- Public (boolean)
+
+This table will contain info for occasions
+Occasions:
+	- Occasion author
+	- Occasion title
+	- Occasion text content
+	- Occasion pictures
+	- Time of post
+
+This table will keep track of posts added to occasions
+Linked posts:
+	- occasion id
+	- post id (foreign key)
+
+This table will keep track of public posts
+Public posts:
+	- post id
+	- user id
+
+Relationships:
+	
+One to one:
+	- User and user id's
+All id's must be unique and cannot be shared with any other data.
+This applies to all data tables, not just users.
+
+One to many:
+	- Users => posts	
+	- Users => occassions
+A single user can create many posts and occasions. However, an
+occasion or a post can only have user that created it.
+
+Many to many:
+	- Posts => occassions
+An occasion can have multiple posts (recipes) added to it.  Also,
+a single post can be added to multiple different occassions.
+
+List of tables:
+
+CREATE TABLE users(
+  user_id SERIAL PRIMARY KEY,
+  user_email VARCHAR(50),
+  username VARCHAR(50),
+  user_password VARCHAR(50),
+  user_first_name VARCHAR(50),
+  user_last_name VARCHAR(50)
+);
+
+CREATE TABLE posts(
+  post_id SERIAL PRIMARY KEY,
+  author_id INT NOT NULL REFERENCES users(user_id),
+  post_title VARCHAR(50),
+  post_description VARCHAR(1000),
+  post_instructions VARCHAR(2000),
+  post_ingredients_list VARCHAR(2000),
+  post_picture_url VARCHAR(2000),
+  time_posted TIMESTAMP,
+  public BOOLEAN DEFAULT false
+);
+
+CREATE TABLE occasions(
+  occasion_id SERIAL PRIMARY KEY,
+  creator_id INT NOT NULL REFERENCES users(user_id),
+  occasion_title VARCHAR(50),
+  occasion_description VARCHAR(1000),
+  occasion_picture_url VARCHAR(2000),
+  time_occasion_posted TIMESTAMP
+);
+
+CREATE TABLE linkied_posts(
+  linked_posts_id SERIAL PRIMARY KEY,
+  occasion_id INT NOT NULL REFERENCES occasions(occasion_id),
+  post_id INT NOT NULL REFERENCES posts(post_id)
+);
+
+CREATE TABLE public_posts(
+  public_post_id SERIAL PRIMARY KEY,
+  post_id INT NOT NULL REFERENCES posts(post_id),
+  user_id INT NOT NULL REFERENCES users(user_id)
+);
+
+
